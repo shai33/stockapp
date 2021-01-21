@@ -22,8 +22,14 @@ class App extends React.Component{
       //   lname: 'Karlinski',
       //   id: 1
       // },
-    }
-  }
+    };
+  };
+  handleLogin = (userObj) => {
+    this.setState({activeUser: userObj})
+  };
+  handleLogout = () => {
+    this.setState({activeUser: null})
+  };
   render() {return (
     <HashRouter>
       <Route exact path={['/', '/watchlist', '/market']}>

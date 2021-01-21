@@ -1,0 +1,16 @@
+[
+    {
+        "id": 1,
+        "fname": "Joe",
+        "lname": "Doe",
+        "email": "joe@gmail.com",
+        "pwd": "123"
+    },
+    {
+        "id": 2,
+        "fname": "Sara",
+        "lname": "Doe",        
+        "email": "sara@sara.com",
+        "pwd": "qwe"
+    }
+]
