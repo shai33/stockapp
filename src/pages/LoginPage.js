@@ -19,7 +19,7 @@ class LoginPage extends React.Component {
         for( let i = 0; i< users.length; i++) {
             if( users[i].pwd == this.state.pwd && users[i].email == this.state.email) {
                 this.props.handleLogin(users[i]);
-                window.location = '/#/recipes'
+                window.location = '/#/watchlist'
                 return;
                 // We will login the user
                 // return the found user

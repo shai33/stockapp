@@ -1,4 +1,5 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import StockappNavbar from '../components/StockappNavbar';
 
 class WatchlistPage extends React.Component {
@@ -7,6 +8,9 @@ class WatchlistPage extends React.Component {
         
     }
     render() {
+        if( ! this.props.activeUser){
+            return <Redirect push to="/login" />
+        }
         return (
                 <div className="c-watchlist-page">WatchlistPage</div>
         )
