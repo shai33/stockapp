@@ -18,9 +18,9 @@ class App extends React.Component{
     this.state = {
        activeUser: null,
       // activeUser: { 
-      //   fname: 'Yaron',
-      //   lname: 'Karlinski',
-      //   id: 1
+      //   fname: 'Sara',
+      //   lname: 'Doe',
+      //   id: 2
       // },
     };
   };

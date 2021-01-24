@@ -1,0 +1,34 @@
+[
+    {
+        "name": "Apple Inc",
+        "open": 136.28,
+        "high": 139.85,
+        "low": 135.02,
+        "close": 139.07,
+        "volume": 114459360.0,
+        "adj_high": 139.85,
+        "adj_low": 135.02,
+        "adj_close": 139.07,
+        "adj_open": 136.28,
+        "adj_volume": 114459360.0,
+        "symbol": "AAPL",
+        "exchange": "XNAS",
+        "date": "2021-01-22T00:00:00+0000"
+      },
+      {
+        "name": "Alphabet Inc Class A",
+        "open": 1891.46,
+        "high": 1904.39,
+        "low": 1876.495,
+        "close": 1892.56,
+        "volume": 1637195.0,
+        "adj_high": 1904.39,
+        "adj_low": 1876.495,
+        "adj_close": 1892.56,
+        "adj_open": 1891.46,
+        "adj_volume": 1637195.0,
+        "symbol": "GOOGL",
+        "exchange": "XNAS",
+        "date": "2021-01-22T00:00:00+0000"
+      }
+]
