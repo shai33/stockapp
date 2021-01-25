@@ -107,7 +107,7 @@ class WatchlistPage extends React.Component {
             tickerCards = this.state.searchedTickers.map( (ticker, index) => {
                 return <TickerCard tickerName={ticker.name} tickerOpen={ticker.open} 
                 tickerClose={ticker.close} tickerHigh={ticker.high} tickerLow={ticker.low}
-                tickerVolume={ticker.volume}> removeTicker={this.removeTicker}></TickerCard>
+                tickerVolume={ticker.volume} removeTicker={this.removeTicker}></TickerCard>
                 
             });
         }
