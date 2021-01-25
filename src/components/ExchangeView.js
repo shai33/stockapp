@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Button, Col, Container, Row, Table } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import {withRouter} from 'react-router';
 
@@ -11,6 +11,7 @@ class ExchangeComp extends React.Component{
           result: '',
           symbol: this.props.match.params.symbol,
           name: '',
+          country: '',
           open: '', 
           close: '', 
           high: '', 
@@ -19,26 +20,58 @@ class ExchangeComp extends React.Component{
       };
     }
     render(){
-        const exchangeCardInfo = <Col xs={6} lg={3}>
-        <Card style={{ width: '18rem' }}>
+        // const exchangeCardInfo = <Col xs={12} lg={12}>
+        // <Card border="dark" className="text-center">
+        // <Card.Header as="h4">{this.state.symbol}</Card.Header>
+        //     <Card.Body>
+        //         <Card.Title>{this.state.name} ({this.state.country})</Card.Title>
+        //         <Card.Text>Open: {this.state.open}</Card.Text>
+        //         <Card.Text>Previous Close: {this.state.close}</Card.Text>
+        //         <Card.Text>Day Range: {this.state.low} - {this.state.high}</Card.Text>
+        //         <Card.Text>Volume: {this.state.volume}</Card.Text>
+        //     </Card.Body>
+        //     </Card>
+        // </Col>
+        const exchangeCardInfo = <Col xs={12} lg={12}>
+        <Card border="dark">
+        <Card.Header as="h4">{this.state.symbol}</Card.Header>
             <Card.Body>
-                <Card.Title>{this.state.name}</Card.Title>
-                <Card.Text>Symbol: {this.state.symbol}</Card.Text>
-                <Card.Text>Open: {this.state.open}</Card.Text>
-                <Card.Text>Vlose: {this.state.close}</Card.Text>
-                <Card.Text>High: {this.state.high}</Card.Text>
-                <Card.Text>Low: {this.state.low}</Card.Text>
-                <Card.Text>Volume:{this.state.volume}</Card.Text>
+                <Table striped>
+                    <thead>
+                        <tr>
+                        <th>{this.state.name}</th>
+                        <th>({this.state.country})</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                        <td>Open</td>
+                        <td>{this.state.open}</td>
+                        </tr>
+                        <tr>
+                        <td>Previous Close</td>
+                        <td>{this.state.close}</td>
+                        </tr>
+                        <tr>
+                        <td>Day Range</td>
+                        <td>{this.state.low} - {this.state.high}</td>
+                        </tr>
+                        <tr>
+                        <td>Volume</td>
+                        <td>{this.state.volume}</td>
+                        </tr>
+                    </tbody>
+                </Table>
             </Card.Body>
             </Card>
         </Col>
         return ( 
         <div>
             <div className="gallery">
-            <Row>
+            <Container>
                 {exchangeCardInfo}
 
-            </Row>
+            </Container>
           </div>
         </div>
         )
@@ -66,6 +99,14 @@ class ExchangeComp extends React.Component{
         .catch(err => {
             // Handle Error Here
             console.error(err);
+        });
+        axios.get(`http://api.marketstack.com/v1/tickers/${this.state.symbol}?access_key=43d9fceee09a8d4b8113b69f9214c110`).then( (res) => {
+    
+          console.log('exchangeName', res.data.name)
+          this.setState({
+              name: res.data.name,
+              country: res.data.country
+            });
         });
       }
 }

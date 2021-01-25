@@ -33,7 +33,7 @@ class App extends React.Component{
   };
   render() {return (
     <HashRouter>
-      <Route exact path={['/', '/watchlist', '/market']}>
+      <Route exact path={['/', '/watchlist', '/market', '/market/:symbol']}>
       <StockappNavbar handleLogout={this.handleLogout} activeUser={this.state.activeUser}/>
       </Route>
       <Container>

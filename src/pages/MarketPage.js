@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Container } from 'react-bootstrap';
-import StockappNavbar from '../components/StockappNavbar';
+
 import MarketsComp from '../components/MarketsView';
 
 class MarketPage extends React.Component {
@@ -26,7 +26,7 @@ class MarketPage extends React.Component {
         )
     }
     componentDidMount(){
-        let newIndex = [];
+        
         axios.get('http://api.marketstack.com/v1/exchanges/INDX/tickers?access_key=43d9fceee09a8d4b8113b69f9214c110').then( (res) => {
     
           const names = res.data.data.indexes.map( (item) => {
@@ -44,6 +44,7 @@ class MarketPage extends React.Component {
               countryData: countries
             });
  /*       
+          let newIndex = [];
           for(let i=0, symbolsArr=[]; i<names.length; i++){
             symbolsArr.push(symbols[i]);
           }
