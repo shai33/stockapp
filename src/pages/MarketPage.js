@@ -9,7 +9,8 @@ class MarketPage extends React.Component {
         super(props);
         this.state = {
             exchangesData: [],
-            indexData: []
+            indexData: [],
+            countryData: []
           }
     }
     render() {
@@ -18,7 +19,8 @@ class MarketPage extends React.Component {
                 <Container>
                     <h1>World Market Data</h1>
                     <p></p>
-                    <MarketsComp exchanges={this.state.exchangesData} index={this.state.indexData}/>
+                    <MarketsComp exchanges={this.state.exchangesData} index={this.state.indexData}
+                                  country={this.state.countryData}/>
                 </Container>
             </div>
         )
@@ -32,14 +34,21 @@ class MarketPage extends React.Component {
           });
           const symbols = res.data.data.indexes.map( (item) => {
             return item.symbol;
-        });
+          });
+          const countries = res.data.data.indexes.map( (item) => {
+            return item.country;
+          });
           this.setState({
               exchangesData: names,
-              indexData: symbols
+              indexData: symbols,
+              countryData: countries
             });
  /*       
-          for(let i=0; i<names.length; i++){
-            axios.get(`http://api.marketstack.com/v1/eod/latest?access_key=43d9fceee09a8d4b8113b69f9214c110&symbols=${symbols[i]}`).then( (res) => {
+          for(let i=0, symbolsArr=[]; i<names.length; i++){
+            symbolsArr.push(symbols[i]);
+          }
+          const symbolsStr = symbolsArr.join(",");
+            axios.get(`http://api.marketstack.com/v1/eod/latest?access_key=43d9fceee09a8d4b8113b69f9214c110&symbols=${symbolsStr}`).then( (res) => {
 
                 console.log('marketPage', res.data.data)
 

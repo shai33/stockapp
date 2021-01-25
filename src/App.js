@@ -10,6 +10,7 @@ import WatchlistPage from './pages/WatchlistPage';
 import MarketPage from './pages/MarketPage';
 import SignupPage from './pages/SignupPage';
 import StockappNavbar from './components/StockappNavbar';
+import ExchangeComp from './components/ExchangeView';
 
 class App extends React.Component{
    
@@ -39,6 +40,9 @@ class App extends React.Component{
         <Switch>
           <Route exact path="/">
             <HomePage activeUser={this.state.activeUser}/>
+          </Route>
+          <Route path="/market/:symbol">
+            <ExchangeComp handleLogin={this.handleLogin}/>
           </Route>
           <Route exact path="/market">
             <MarketPage handleLogin={this.handleLogin}/>
