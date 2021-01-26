@@ -58,10 +58,8 @@ class TickerCard extends React.Component{
         )
     }
     componentDidMount(){
-        
-        axios.get(`http://api.marketstack.com/v1/intraday/latest?access_key=43d9fceee09a8d4b8113b69f9214c110&symbols=${this.props.tickerSymbol}`)
+        axios.get(`http://api.marketstack.com/v1/intraday/latest?access_key=43d9fceee09a8d4b8113b69f9214c110&symbols=${this.props.tickerSymbol}&interval=1min`)
             .then((res) => {
-                
                 const open = res.data.data.map( (item) => {
                     return item.open;
                 })
