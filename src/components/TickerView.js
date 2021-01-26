@@ -11,36 +11,36 @@ class TickerComp extends React.Component{
           result: '',
           symbol: this.props.match.params.symbol,
           name: '',
-          country: '',
           open: '', 
           close: '', 
           high: '', 
           low: '', 
-          volume: ''
+          volume: '',
+          last1: '',
+          last: ''
       };
-    }
+    };
+    getCurrentDate = () => {
+        return new Date().toISOString().slice(0,10);
+    };
+    calcChange = (last, close) => {
+        return (last/close*100 -100).toFixed(2);
+    };
     render(){
-        // const exchangeCardInfo = <Col xs={12} lg={12}>
-        // <Card border="dark" className="text-center">
-        // <Card.Header as="h4">{this.state.symbol}</Card.Header>
-        //     <Card.Body>
-        //         <Card.Title>{this.state.name} ({this.state.country})</Card.Title>
-        //         <Card.Text>Open: {this.state.open}</Card.Text>
-        //         <Card.Text>Previous Close: {this.state.close}</Card.Text>
-        //         <Card.Text>Day Range: {this.state.low} - {this.state.high}</Card.Text>
-        //         <Card.Text>Volume: {this.state.volume}</Card.Text>
-        //     </Card.Body>
-        //     </Card>
-        // </Col>
+        let chng = this.calcChange(this.state.last1, this.state.close);
         const exchangeCardInfo = <Col xs={12} lg={12}>
         <Card border="dark">
-        <Card.Header as="h4">{this.state.symbol}</Card.Header>
+        <Card.Header as="h6">{this.state.name}
+            <p></p>
+            <Card.Header as="h4">{this.state.last1}
+            <span style={{ paddingLeft: '1.5rem', fontSize: '14px' }}>{chng}%</span>
+            </Card.Header>
+        </Card.Header>
             <Card.Body>
                 <Table striped>
                     <thead>
                         <tr>
-                        <th>{this.state.name}</th>
-                        <th>({this.state.country})</th>
+                        <th>DAY</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -78,17 +78,21 @@ class TickerComp extends React.Component{
     }
     componentDidMount(){
         
-        axios.get(`http://api.marketstack.com/v1/eod/latest?access_key=43d9fceee09a8d4b8113b69f9214c110&symbols=${this.state.symbol}`)
+        axios.get(`http://api.marketstack.com/v1/intraday/${this.getCurrentDate()}?access_key=43d9fceee09a8d4b8113b69f9214c110&symbols=${this.state.symbol}&interval=15min`)
             .then( (res) => {
-
-                console.log('marketPage', res.data);
                 const open = res.data.data[0].open;
                 const high =res.data.data[0].high;
                 const low =res.data.data[0].low;
                 const close =res.data.data[0].close;
                 const volume =res.data.data[0].volume;
-                console.log('res.data.open', open);
+                const last1 = res.data.data[0].last;
+                const last = res.data.data.map( (item) => {
+                    return item.last;
+                })
+
                 this.setState({
+                    last1: last1,
+                    last: last,
                     open: open, 
                     close: close, 
                     high: high, 
@@ -104,8 +108,7 @@ class TickerComp extends React.Component{
     
           console.log('exchangeName', res.data.name)
           this.setState({
-              name: res.data.name,
-              country: res.data.country
+              name: res.data.name
             });
         });
       }
