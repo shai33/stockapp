@@ -5,23 +5,22 @@ import axios from 'axios';
 import LiveSearchBox from '../components/LiveSearchBox';
 import TickerCard from '../components/TickerCard'
 import tickerJSON from '../data/tickers.json';
-import StockappNavbar from '../components/StockappNavbar';
 
 class WatchlistPage extends React.Component {
     constructor(props) {
         super(props);
-        let searchedTickers;
+        let myTickers;
         if(localStorage.getItem('localTickers')){
-        searchedTickers = JSON.parse(localStorage.getItem('localTickers'));
+        myTickers = JSON.parse(localStorage.getItem('localTickers'));
         }
         else{
-        searchedTickers = tickerJSON;
+        myTickers = tickerJSON;
         }
         this.state = {
             results: [],
             selectedTickers: [],
             symbolResults: [],
-            searchedTickers: searchedTickers,
+            myTickers: myTickers,
             index: ''
         };
     }
@@ -44,7 +43,7 @@ class WatchlistPage extends React.Component {
                 //     return item.close;
                 // })
                 
-                const newTickers = this.state.searchedTickers.concat({symbol: ticker_symbol, name: ticker, 
+                const newTickers = this.state.myTickers.concat({symbol: ticker_symbol, name: ticker, 
                     open: open, close: close, high: high, low: low, volume: volume})
                 localStorage.setItem('localTickers', JSON.stringify(newTickers))
 
@@ -52,7 +51,7 @@ class WatchlistPage extends React.Component {
                     selectedTickers: this.state.selectedTickers.concat({symbol: ticker_symbol, name: ticker, 
                         open: open, close: close, high: high, low: low, volume: volume}),
                     results: [],
-                    searchedTickers: newTickers
+                    myTickers: newTickers
                 });
                 console.log('foooo', this.state.selectedTickers);
             });
@@ -90,12 +89,25 @@ class WatchlistPage extends React.Component {
                 console.log('symbolresults', symbols)
             });
     };
-    removeTicker = () => {
-        this.state.searchedTickers.splice(this.index, 1);
-        localStorage.setItem('localTickers', JSON.stringify(this.state.searchedTickers));
+    // removeTicker = () => {
+    //     this.state.myTickers.splice(this.index, 1);
+    //     localStorage.setItem('localTickers', JSON.stringify(this.state.myTickers));
+    //     // localStorage.removeItem('localTickers');
+    //     this.setState({
+    //         myTickers: JSON.parse(localStorage.getItem('localTickers'))
+    //     });
+    // };
+    removeTicker = (symbol) => {
+        const filteredTickers = this.state.myTickers.filter( (item) => {
+            if(item.symbol !== symbol){
+                return true;
+            }
+        });
+        console.log('filteredTickers', filteredTickers)
+        localStorage.setItem('localTickers', JSON.stringify(filteredTickers));
         // localStorage.removeItem('localTickers');
         this.setState({
-            searchedTickers: JSON.parse(localStorage.getItem('localTickers'))
+            myTickers: JSON.parse(localStorage.getItem('localTickers'))
         });
     };
     render() {
@@ -103,11 +115,11 @@ class WatchlistPage extends React.Component {
             return <Redirect push to="/login" />
         }
         let tickerCards;
-        if(this.state.searchedTickers){
-            tickerCards = this.state.searchedTickers.map( (ticker, index) => {
+        if(this.state.myTickers){
+            tickerCards = this.state.myTickers.map( (ticker, index) => {
                 return <TickerCard tickerName={ticker.name} tickerOpen={ticker.open} 
                 tickerClose={ticker.close} tickerHigh={ticker.high} tickerLow={ticker.low}
-                tickerVolume={ticker.volume} removeTicker={this.removeTicker}></TickerCard>
+                tickerVolume={ticker.volume} removeTicker={() => this.removeTicker(ticker.symbol)}></TickerCard>
                 
             });
         }
