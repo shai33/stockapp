@@ -5,6 +5,7 @@ import axios from 'axios';
 import LiveSearchBox from '../components/LiveSearchBox';
 import TickerCard from '../components/TickerCard'
 import tickerJSON from '../data/tickers.json';
+import { Row } from 'react-bootstrap';
 
 class WatchlistPage extends React.Component {
     constructor(props) {
@@ -28,28 +29,41 @@ class WatchlistPage extends React.Component {
         const ticker = this.state.results[index];
         const ticker_symbol = this.state.symbolResults[index];
         console.log('ticker_symbol', ticker_symbol);
-        axios.get(`http://api.marketstack.com/v1/tickers/${ticker_symbol}/eod/latest?access_key=43d9fceee09a8d4b8113b69f9214c110`)
+        axios.get(`http://api.marketstack.com/v1/intraday/latest?access_key=43d9fceee09a8d4b8113b69f9214c110&symbols=${ticker_symbol}`)
             .then((res) => {
-                const open = res.data.open;
-                const high =res.data.high;
-                const low =res.data.low;
-                const close =res.data.close;
-                const volume =res.data.volume;
-                console.log('res.data.open', res.data.open);
-                // const open = res.data.data.eod.map( (item) => {
-                //     return item.open;
-                // })
-                // const close = res.data.data.eod.map( (item) => {
-                //     return item.close;
-                // })
+                
+                const open = res.data.data.map( (item) => {
+                    return item.open;
+                })
+                const close = res.data.data.map( (item) => {
+                    return item.close;
+                })
+                const high = res.data.data.map( (item) => {
+                    return item.high;
+                })
+                const low = res.data.data.map( (item) => {
+                    return item.low;
+                })
+                const volume = res.data.data.map( (item) => {
+                    return item.volume;
+                })
+                const last = res.data.data.map( (item) => {
+                    return item.last;
+                })
+                // const open = res.data.open;
+                // const high =res.data.high;
+                // const low =res.data.low;
+                // const close =res.data.close;
+                // const volume =res.data.volume;
+                // console.log('res.data.open', res.data.open);
                 
                 const newTickers = this.state.myTickers.concat({symbol: ticker_symbol, name: ticker, 
-                    open: open, close: close, high: high, low: low, volume: volume})
+                    open: open, close: close, high: high, low: low, volume: volume, last: last})
                 localStorage.setItem('localTickers', JSON.stringify(newTickers))
 
                 this.setState({
                     selectedTickers: this.state.selectedTickers.concat({symbol: ticker_symbol, name: ticker, 
-                        open: open, close: close, high: high, low: low, volume: volume}),
+                        open: open, close: close, high: high, low: low, volume: volume, last: last}),
                     results: [],
                     myTickers: newTickers
                 });
@@ -117,17 +131,18 @@ class WatchlistPage extends React.Component {
         let tickerCards;
         if(this.state.myTickers){
             tickerCards = this.state.myTickers.map( (ticker, index) => {
-                return <TickerCard tickerName={ticker.name} tickerOpen={ticker.open} 
+                return <TickerCard tickerName={ticker.name} tickerSymbol={ticker.symbol} tickerOpen={ticker.open} 
                 tickerClose={ticker.close} tickerHigh={ticker.high} tickerLow={ticker.low}
-                tickerVolume={ticker.volume} removeTicker={() => this.removeTicker(ticker.symbol)}></TickerCard>
+                tickerVolume={ticker.volume} tickerLast={ticker.last} 
+                removeTicker={() => this.removeTicker(ticker.symbol)}></TickerCard>
                 
             });
         }
         else{
             tickerCards = this.state.selectedTickers.map( (ticker, index) => {
-                return <TickerCard tickerName={ticker.name} tickerOpen={ticker.open} 
+                return <TickerCard tickerName={ticker.name} tickerSymbol={ticker.symbol} tickerOpen={ticker.open} 
                 tickerClose={ticker.close} tickerHigh={ticker.high} tickerLow={ticker.low}
-                tickerVolume={ticker.volume}> </TickerCard>
+                tickerVolume={ticker.volume} tickerLast={ticker.last}> </TickerCard>
                 
             });
         }
@@ -139,7 +154,11 @@ class WatchlistPage extends React.Component {
                 placeholderText="Symbol/Company/Index" 
                 results={this.state.results} />
                 
-                <div>{tickerCards}</div>
+                <div>
+                <Row>
+                    {tickerCards}
+                </Row>
+                </div>
             </div>
         )
     }

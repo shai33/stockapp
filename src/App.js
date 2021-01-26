@@ -11,6 +11,7 @@ import MarketPage from './pages/MarketPage';
 import SignupPage from './pages/SignupPage';
 import StockappNavbar from './components/StockappNavbar';
 import ExchangeComp from './components/ExchangeView';
+import TickerComp from './components/TickerView';
 
 class App extends React.Component{
    
@@ -33,7 +34,7 @@ class App extends React.Component{
   };
   render() {return (
     <HashRouter>
-      <Route exact path={['/', '/watchlist', '/market', '/market/:symbol']}>
+      <Route exact path={['/', '/watchlist', '/market', '/market/:symbol', '/watchlist/:symbol']}>
       <StockappNavbar handleLogout={this.handleLogout} activeUser={this.state.activeUser}/>
       </Route>
       <Container>
@@ -46,6 +47,9 @@ class App extends React.Component{
           </Route>
           <Route exact path="/market">
             <MarketPage handleLogin={this.handleLogin}/>
+          </Route>
+          <Route path="/watchlist/:symbol">
+            <TickerComp handleLogin={this.handleLogin}/>
           </Route>
           <Route exact path="/watchlist">
             <WatchlistPage activeUser={this.state.activeUser}/>
