@@ -42,18 +42,23 @@ class TickerComp extends React.Component{
           chartData: ''
       };
     };
-    getCurrentDate = () => {
+    getCurrentDate = (offset) => {
         let date = new Date();
-        let previousDay = new Date(date.setDate(date.getDate() - 1));
+        let previousDay = new Date(date.setDate(date.getDate() + offset));
 
         return previousDay.toISOString().slice(0,10);
     };
     calcDayHours = (offset) => {
         let date = new Date();
         let previousHour = new Date(date.setHours(date.getHours() + offset));
-        let time = new Date();
         
         return previousHour.toLocaleString('en-US', { hour: 'numeric', hour12: true })
+    };
+    calcWeekDays = (offset) => {
+        let date = new Date();
+        let previousDay = new Date(date.setDate(date.getDate() + offset));
+        
+        return previousDay.toLocaleString('en-US', { day: 'numeric' })
     };
     calcChange = (last, close) => {
         return (last/close*100 -100).toFixed(2);
@@ -69,11 +74,14 @@ class TickerComp extends React.Component{
             </Card.Header>
         </Card.Header>
             <Card.Body>
-            {this.state.chartData && <Line data={this.state.chartData} />}
-                <Button variant="outline-secondary" size="sm" >DAY</Button>
-                <Button variant="outline-secondary" size="sm" >WEEK</Button>
-                <Button variant="outline-secondary" size="sm" >MONTH</Button>
-                <Button variant="outline-secondary" size="sm" >YEAR</Button>
+                {this.state.chartData && <Line data={this.state.chartData} />}
+                <div className="chart-btns">
+                    <Button variant="outline-secondary" size="sm" onClick={() => this.dayChart()}>DAY</Button>
+                    <Button variant="outline-secondary" size="sm" onClick={() => this.weekChart()}>WEEK</Button>
+                    <Button variant="outline-secondary" size="sm" >MONTH</Button>
+                    <Button variant="outline-secondary" size="sm" >YEAR</Button>
+                </div>
+                
                 <Table striped>
                     <tbody>
                         <tr>
@@ -102,15 +110,13 @@ class TickerComp extends React.Component{
             <div className="gallery">
             <Container>
                 {exchangeCardInfo}
-
             </Container>
           </div>
         </div>
         )
     }
     componentDidMount(){
-        
-        axios.get(`http://api.marketstack.com/v1/intraday/${this.getCurrentDate()}?access_key=43d9fceee09a8d4b8113b69f9214c110&symbols=${this.state.symbol}&interval=15min`)
+        axios.get(`http://api.marketstack.com/v1/intraday/${this.getCurrentDate(-1)}?access_key=43d9fceee09a8d4b8113b69f9214c110&symbols=${this.state.symbol}&interval=15min`)
             .then( (res) => {
                 const open = res.data.data[0].open;
                 const high =res.data.data[0].high;
@@ -153,7 +159,59 @@ class TickerComp extends React.Component{
               name: res.data.name
             });
         });
-      }
+      };
+      dayChart = () => {
+        axios.get(`http://api.marketstack.com/v1/intraday/${this.getCurrentDate(0)}?access_key=43d9fceee09a8d4b8113b69f9214c110&symbols=${this.state.symbol}&interval=15min`)
+            .then( (res) => {
+                const last = res.data.data.map( (item) => {
+                    return item.last;
+                })
+                console.log('lastDay', last)
+                this.setState({
+                    last: last,
+                    chartData: {
+                        labels: [this.calcDayHours(0), this.calcDayHours(1), this.calcDayHours(2), this.calcDayHours(3), this.calcDayHours(4), 
+                            this.calcDayHours(5), this.calcDayHours(6), this.calcDayHours(7), this.calcDayHours(8)],
+                        datasets: [
+                          {
+                            ...this.datasets,
+                            data: last.reverse()
+                          }
+                        ]
+                      }
+                });
+        })
+        .catch(err => {
+            // Handle Error Here
+            console.error(err);
+        });
+      };
+      weekChart = () => {
+        axios.get(`http://api.marketstack.com/v1/intraday?access_key=43d9fceee09a8d4b8113b69f9214c110&symbols=${this.state.symbol}&date_from=${this.getCurrentDate(-7)}&date_to=${this.getCurrentDate(0)}&interval=1hour`)
+            .then( (res) => {
+                const last = res.data.data.map( (item) => {
+                    return item.last;
+                })
+                console.log('lastDay', last)
+                this.setState({
+                    last: last,
+                    chartData: {
+                        labels: [this.calcWeekDays(-6), this.calcWeekDays(-5), this.calcWeekDays(-4), this.calcWeekDays(-3), 
+                            this.calcWeekDays(-2), this.calcWeekDays(-1)],
+                        datasets: [
+                          {
+                            ...this.datasets,
+                            data: last.reverse()
+                          }
+                        ]
+                      }
+                });
+        })
+        .catch(err => {
+            // Handle Error Here
+            console.error(err);
+        });
+      };
 }
 
 export default withRouter(TickerComp);
