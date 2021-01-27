@@ -48,18 +48,30 @@ class TickerComp extends React.Component{
 
         return previousDay.toISOString().slice(0,10);
     };
-    calcDayHours = (offset, minutes) => {
+    calcDayHours = (offsetHrs, offsetMins) => {
         let date = new Date();
-        let previousHour = new Date(date.setHours(date.getHours() + offset, minutes));
+        let previousHour = new Date(date.setHours(date.getHours() + offsetHrs, offsetMins));
         
         return previousHour.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
     };
     calcWeekDays = (offset) => {
+      let date = new Date();
+      let previousDay = new Date(date.setDate(date.getDate() + offset));
+      
+      return previousDay.toLocaleString('en-US', { month: 'short', day: 'numeric' })
+  };
+    calcMonthDays = (offsetDays) => {
         let date = new Date();
-        let previousDay = new Date(date.setDate(date.getDate() + offset));
+        let previousDay = new Date(date.setMonth(date.getMonth(), offsetDays));
         
-        return previousDay.toLocaleString('en-US', { day: 'numeric' })
+        return previousDay.toLocaleString('en-US', { month: 'short', day: 'numeric' })
     };
+    calcYearDays = (offsetMonth, offsetDays) => {
+      let date = new Date();
+      let previousDay = new Date(date.setFullYear(date.getFullYear(), date.getMonth() + offsetMonth, offsetDays));
+      
+      return previousDay.toLocaleString('en-US', { month: 'short', year: 'numeric' })
+  };
     calcChange = (last, close) => {
         return (last/close*100 -100).toFixed(2);
     };
@@ -78,8 +90,8 @@ class TickerComp extends React.Component{
                 <div className="chart-btns">
                     <Button variant="outline-secondary" size="sm" onClick={() => this.dayChart()}>DAY</Button>
                     <Button variant="outline-secondary" size="sm" onClick={() => this.weekChart()}>WEEK</Button>
-                    <Button variant="outline-secondary" size="sm" >MONTH</Button>
-                    <Button variant="outline-secondary" size="sm" >YEAR</Button>
+                    <Button variant="outline-secondary" size="sm" onClick={() => this.monthChart()}>MONTH</Button>
+                    <Button variant="outline-secondary" size="sm" onClick={() => this.yearChart()}>YEAR</Button>
                 </div>
                 
                 <Table striped>
@@ -161,7 +173,7 @@ class TickerComp extends React.Component{
         });
       };
       dayChart = () => {
-        axios.get(`http://api.marketstack.com/v1/intraday/${this.getCurrentDate(0)}?access_key=43d9fceee09a8d4b8113b69f9214c110&symbols=${this.state.symbol}&interval=30min`)
+        axios.get(`http://api.marketstack.com/v1/intraday/${this.getCurrentDate(0)}?access_key=43d9fceee09a8d4b8113b69f9214c110&symbols=${this.state.symbol}&interval=15min`)
             .then( (res) => {
                 const last = res.data.data.map( (item) => {
                     return item.last;
@@ -194,12 +206,66 @@ class TickerComp extends React.Component{
                 const last = res.data.data.map( (item) => {
                     return item.last;
                 })
-                console.log('lastDay', last)
+                console.log('lastWeek', last)
                 this.setState({
                     last: last,
                     chartData: {
                         labels: [this.calcWeekDays(-7), this.calcWeekDays(-6), this.calcWeekDays(-5), this.calcWeekDays(-4), 
                                   this.calcWeekDays(-3), this.calcWeekDays(-2), this.calcWeekDays(-1)],
+                        datasets: [
+                          {
+                            ...this.datasets,
+                            data: last.reverse()
+                          }
+                        ]
+                      }
+                });
+        })
+        .catch(err => {
+            // Handle Error Here
+            console.error(err);
+        });
+      };
+      monthChart = () => {
+        axios.get(`http://api.marketstack.com/v1/intraday?access_key=43d9fceee09a8d4b8113b69f9214c110&symbols=${this.state.symbol}&date_from=${this.getCurrentDate(-30)}&date_to=${this.getCurrentDate(0)}&interval=6hour`)
+            .then( (res) => {
+                const last = res.data.data.map( (item) => {
+                    return item.last;
+                })
+                console.log('lastMonth', last)
+                this.setState({
+                    last: last,
+                    chartData: {
+                        labels: [this.calcMonthDays(-27), this.calcMonthDays(-22), this.calcMonthDays(-17), this.calcMonthDays(-12), 
+                                  this.calcMonthDays(-7), this.calcMonthDays(-2), this.calcMonthDays(5)],
+                        datasets: [
+                          {
+                            ...this.datasets,
+                            data: last.reverse()
+                          }
+                        ]
+                      }
+                });
+        })
+        .catch(err => {
+            // Handle Error Here
+            console.error(err);
+        });
+      };
+      yearChart = () => {
+        axios.get(`http://api.marketstack.com/v1/intraday?access_key=43d9fceee09a8d4b8113b69f9214c110&symbols=${this.state.symbol}&date_from=${this.getCurrentDate(-365)}&date_to=${this.getCurrentDate(0)}&interval=6hour`)
+            .then( (res) => {
+                const last = res.data.data.map( (item) => {
+                    return item.last;
+                })
+                console.log('lastYear', last)
+                this.setState({
+                    last: last,
+                    chartData: {
+                        labels: [this.calcYearDays(-12, 0), '', '', '', '', '', '', '', '', '', '', '', '', this.calcYearDays(-10, 10), '', '', '', '', '', '', '', '', '', '', '', '',  
+                                this.calcYearDays(-8, 10), '', '', '', '', '', '', '', '', '', '', '', '', this.calcYearDays(-6, 10), '', '', '', '', '', '', '', '', '', '', '', '',  
+                                  this.calcYearDays(-4, 10), '', '', '', '', '', '', '', '', '', '', '', '', this.calcYearDays(-2, 10), '', '', '', '', '', '', '', '', '', '', '', '', 
+                                  this.calcYearDays(0, 29)],
                         datasets: [
                           {
                             ...this.datasets,
