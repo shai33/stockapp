@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 
 import LiveSearchBox from '../components/LiveSearchBox';
-import TickerCard from '../components/TickerCard'
+import TickerBasic from '../components/TickerBasic'
 import StockappNavbar from '../components/StockappNavbar';
 
 class HomePage extends React.Component {
@@ -48,16 +48,6 @@ class HomePage extends React.Component {
             })
             return;
         };
-        // Array.filter -> An array method
-        // Takes a callback
-        // for each item in the array -> the callback is run with a different item
-        // if the callback returns true, the item stays
-        // if false it is not in the new array
-        // Returns a new filtered array, does not effect the original array
-        
-        // const searchResults = this.staticActorsJson.filter( (actor) => {
-        //     return actor.toLowerCase().includes(searchText.toLowerCase());
-        // })
         axios.get(`http://api.marketstack.com/v1/tickers?access_key=43d9fceee09a8d4b8113b69f9214c110&search=${searchText}`)
             .then((res) => {
                 const names = res.data.data.map( (item) => {
@@ -76,19 +66,20 @@ class HomePage extends React.Component {
     };
     render() {
         const tickerCards = this.state.selectedTickers.map( (ticker, index) => {
-            return <TickerCard tickerName={ticker.name} tickerOpen={ticker.open} 
+            return <TickerBasic tickerName={ticker.name} tickerOpen={ticker.open} 
             tickerClose={ticker.close} tickerHigh={ticker.high} tickerLow={ticker.low}
-            tickerVolume={ticker.volume}> </TickerCard>
+            tickerVolume={ticker.volume}> </TickerBasic>
             
         });
         return (
             <div className="c-home-page">
-                <LiveSearchBox 
-                searchTextChanged={this.searchTickers}
-                resultSelected={this.addTicker}
-                placeholderText="Symbol/Company/Index" 
-                results={this.state.results} />
-                
+                <div>
+                    <LiveSearchBox searchTextChanged={this.searchTickers} resultSelected={this.addTicker}
+                    placeholderText="Symbol/Company/Index" results={this.state.results} />
+                </div>
+                <p></p>
+                <h4>Today</h4>
+                <p></p>
                 <div>{tickerCards}</div>
             </div>
         )

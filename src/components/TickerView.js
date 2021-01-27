@@ -8,6 +8,26 @@ import {Line} from 'react-chartjs-2';
 class TickerComp extends React.Component{
     constructor(props){
       super(props);
+      this.datasets = {
+        label: '',
+        fill: true,
+        lineTension: 0.1,
+        backgroundColor: 'rgba(75,192,192,0.4)',
+        borderColor: 'rgba(75,192,192,1)',
+        borderCapStyle: 'butt',
+        borderDash: [],
+        borderDashOffset: 0.0,
+        borderJoinStyle: 'miter',
+        pointBorderColor: 'rgba(75,192,192,1)',
+        pointBackgroundColor: '#fff',
+        pointBorderWidth: 1,
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+        pointHoverBorderColor: 'rgba(220,220,220,1)',
+        pointHoverBorderWidth: 2,
+        pointRadius: 1,
+        pointHitRadius: 10
+      }
       this.state = {
           result: '',
           symbol: this.props.match.params.symbol,
@@ -18,11 +38,22 @@ class TickerComp extends React.Component{
           low: '', 
           volume: '',
           last1: '',
-          last: ''
+          last: '',
+          chartData: ''
       };
     };
     getCurrentDate = () => {
-        return new Date().toISOString().slice(0,10);
+        let date = new Date();
+        let previousDay = new Date(date.setDate(date.getDate() - 1));
+
+        return previousDay.toISOString().slice(0,10);
+    };
+    calcDayHours = (offset) => {
+        let date = new Date();
+        let previousHour = new Date(date.setHours(date.getHours() + offset));
+        let time = new Date();
+        
+        return previousHour.toLocaleString('en-US', { hour: 'numeric', hour12: true })
     };
     calcChange = (last, close) => {
         return (last/close*100 -100).toFixed(2);
@@ -38,13 +69,12 @@ class TickerComp extends React.Component{
             </Card.Header>
         </Card.Header>
             <Card.Body>
-            <Line data={data} />
+            {this.state.chartData && <Line data={this.state.chartData} />}
+                <Button variant="outline-secondary" size="sm" >DAY</Button>
+                <Button variant="outline-secondary" size="sm" >WEEK</Button>
+                <Button variant="outline-secondary" size="sm" >MONTH</Button>
+                <Button variant="outline-secondary" size="sm" >YEAR</Button>
                 <Table striped>
-                    <thead>
-                        <tr>
-                        <th>DAY</th>
-                        </tr>
-                    </thead>
                     <tbody>
                         <tr>
                         <td>Open</td>
@@ -91,7 +121,7 @@ class TickerComp extends React.Component{
                 const last = res.data.data.map( (item) => {
                     return item.last;
                 })
-
+                console.log('last', last)
                 this.setState({
                     last1: last1,
                     last: last,
@@ -99,7 +129,17 @@ class TickerComp extends React.Component{
                     close: close, 
                     high: high, 
                     low: low, 
-                    volume: volume
+                    volume: volume,
+                    chartData: {
+                        labels: [this.calcDayHours(0), this.calcDayHours(1), this.calcDayHours(2), this.calcDayHours(3), this.calcDayHours(4), 
+                            this.calcDayHours(5), this.calcDayHours(6), this.calcDayHours(7), this.calcDayHours(8)],
+                        datasets: [
+                          {
+                            ...this.datasets,
+                            data: last.reverse()
+                          }
+                        ]
+                      }
                 });
         })
         .catch(err => {
@@ -117,12 +157,21 @@ class TickerComp extends React.Component{
 }
 
 export default withRouter(TickerComp);
-
+/*
+const calcDayHours = (offset) => {
+    let date = new Date();
+    let previousHour = new Date(date.setHours(date.getHours() + offset));
+    let time = new Date();
+    
+    return previousHour.toLocaleString('en-US', { hour: 'numeric', hour12: true })
+};
+// console.log('last', this.last)
 const data = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+    labels: [calcDayHours(0), calcDayHours(1), calcDayHours(2), calcDayHours(3), calcDayHours(4), 
+        calcDayHours(5), calcDayHours(6), calcDayHours(7), calcDayHours(8)],
     datasets: [
       {
-        label: 'My First dataset',
+        label: '',
         fill: false,
         lineTension: 0.1,
         backgroundColor: 'rgba(75,192,192,0.4)',
@@ -144,3 +193,4 @@ const data = {
       }
     ]
   };
+  */
