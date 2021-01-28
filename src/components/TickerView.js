@@ -94,7 +94,6 @@ class TickerComp extends React.Component{
                     <Button variant="outline-secondary" size="sm" onClick={() => this.monthChart()}>MONTH</Button>
                     <Button variant="outline-secondary" size="sm" onClick={() => this.yearChart()}>YEAR</Button>
                 </div>
-                
                 <Table striped>
                     <tbody>
                         <tr>
