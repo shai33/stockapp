@@ -26,9 +26,7 @@ class MarketPage extends React.Component {
         )
     }
     componentDidMount(){
-        
         axios.get('http://api.marketstack.com/v1/exchanges/INDX/tickers?access_key=43d9fceee09a8d4b8113b69f9214c110').then( (res) => {
-    
           const names = res.data.data.indexes.map( (item) => {
             return item.name;
           });

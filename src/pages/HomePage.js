@@ -1,8 +1,10 @@
 import React from 'react';
 import axios from 'axios';
+import { Container } from 'react-bootstrap';
 
 import LiveSearchBox from '../components/LiveSearchBox';
-import TickerBasic from '../components/TickerBasic'
+import TickerBasic from '../components/TickerBasic';
+import HomeComp from '../components/HomeView';
 import StockappNavbar from '../components/StockappNavbar';
 
 class HomePage extends React.Component {
@@ -11,7 +13,11 @@ class HomePage extends React.Component {
         this.state = {
             results: [],
             selectedTickers: [],
-            symbolResults: []
+            symbolResults: [],
+            sources: [],
+            titles: [],
+            contents: [],
+            urls: []
         };
     }
     addTicker = (index) => {
@@ -78,11 +84,57 @@ class HomePage extends React.Component {
                     placeholderText="Symbol/Company/Index" results={this.state.results} />
                 </div>
                 <p></p>
-                <h4>Today</h4>
-                <p></p>
                 <div>{tickerCards}</div>
+                <Container>
+                    <h4>Today's headlines</h4>
+                    <p></p>
+                    <HomeComp sources={this.state.sources} titles={this.state.titles}
+                            contents={this.state.contents} urls={this.state.urls}/>
+                </Container>
             </div>
         )
     }
+    componentDidMount(){
+        axios.get('http://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=bbf81e11158149bf8b08042e0ab76fe1').then( (res) => {
+          const sources = res.data.articles.map( (item) => {
+            return item.source.name;
+          });
+          const titles = res.data.articles.map( (item) => {
+            return item.title;
+          });
+          const contents = res.data.articles.map( (item) => {
+            return item.description;
+          });
+          const urls = res.data.articles.map( (item) => {
+            return item.url;
+          });
+          this.setState({
+              sources: sources,
+              titles: titles,
+              contents: contents,
+              urls: urls
+            });
+ /*       
+          let newIndex = [];
+          for(let i=0, symbolsArr=[]; i<names.length; i++){
+            symbolsArr.push(symbols[i]);
+          }
+          const symbolsStr = symbolsArr.join(",");
+            axios.get(`http://api.marketstack.com/v1/eod/latest?access_key=43d9fceee09a8d4b8113b69f9214c110&symbols=${symbolsStr}`).then( (res) => {
+
+                console.log('marketPage', res.data.data)
+
+            // newIndex.push(result.data.message)
+            // console.log('newIndex', newIndex)
+            // console.log(' Ajax finished loading'); 
+            // this.setState({indexData: newIndex});
+            })
+            .catch(err => {
+                // Handle Error Here
+                console.error(err);
+            });
+          }*/
+        });
+      }
 }
 export default HomePage;
