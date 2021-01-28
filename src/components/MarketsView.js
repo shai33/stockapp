@@ -22,9 +22,11 @@ class MarketsComp extends React.Component{
         console.log('foooo1', this.props.index.length);
         for(let i=0; i<this.props.exchanges.length; i++) {
             const cardContent = <Col xs={6} lg={3}>
-            <Card style={{ width: '18rem' }} onClick={() => this.handleClick(this.props.index[i])}>
+            <Card bg="secondary" text="white" style={{ width: '18rem',  margin: '3px' }} 
+                onClick={() => this.handleClick(this.props.index[i])}>
+               <Card.Header as="h5">{this.props.exchanges[i]}</Card.Header>
                <Card.Body>
-                  <Card.Title>{this.props.exchanges[i]}</Card.Title>
+                  {/* <Card.Title>{this.props.exchanges[i]}</Card.Title> */}
                   <Card.Text>{this.props.index[i]} ({this.props.country[i]})</Card.Text>
                </Card.Body>
                </Card>
@@ -35,7 +37,7 @@ class MarketsComp extends React.Component{
         return ( 
         <div>
             <div className="gallery">
-            <Row>
+            <Row style={{ margin: '2px' }}>
                 {exchangeCardInfo}
 
             </Row>
