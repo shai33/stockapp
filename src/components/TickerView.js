@@ -130,6 +130,41 @@ class TickerComp extends React.Component{
     componentDidMount(){
         axios.get(`http://api.marketstack.com/v1/intraday/${this.getCurrentDate(0)}?access_key=43d9fceee09a8d4b8113b69f9214c110&symbols=${this.state.symbol}&interval=15min`)
             .then( (res) => {
+              console.log('res.data.dataToday', res.data.data)
+              if(res.data.data.length === 0){
+                axios.get(`http://api.marketstack.com/v1/intraday/${this.getCurrentDate(-1)}?access_key=43d9fceee09a8d4b8113b69f9214c110&symbols=${this.state.symbol}&interval=15min`)
+                    .then( (res) => {
+                      const open = res.data.data[0].open;
+                const high =res.data.data[0].high;
+                const low =res.data.data[0].low;
+                const close =res.data.data[0].close;
+                const volume =res.data.data[0].volume;
+                const last1 = res.data.data[0].last;
+                const last = res.data.data.map( (item) => {
+                    return item.last;
+                })
+                console.log('last', last)
+                this.setState({
+                    last1: last1,
+                    last: last,
+                    open: open, 
+                    close: close, 
+                    high: high, 
+                    low: low, 
+                    volume: volume,
+                    chartData: {
+                        labels: [this.calcDayHours(-8, 0), this.calcDayHours(-7, 0), this.calcDayHours(-6, 0), this.calcDayHours(-5, 0), this.calcDayHours(-4, 0), 
+                            this.calcDayHours(-3, 0), this.calcDayHours(-2, 0), this.calcDayHours(-1, 0), this.calcDayHours(0, 0)],
+                        datasets: [
+                          {
+                            ...this.datasets,
+                            data: last.reverse()
+                          }
+                        ]
+                      }
+                    });
+                });
+              }
                 const open = res.data.data[0].open;
                 const high =res.data.data[0].high;
                 const low =res.data.data[0].low;
