@@ -17,10 +17,15 @@ class MarketPage extends React.Component {
         return (
             <div className="c-market-page">
                 <Container>
-                    <h1>World Market Data</h1>
+                    <h1>World Markets Data</h1>
                     <p></p>
                     <MarketsComp exchanges={this.state.exchangesData} index={this.state.indexData}
                                   country={this.state.countryData}/>
+                    <div className="gallery">
+                    {/* <Row>
+                        {this.state.card ? filteredActor : actorCardInfo}
+                    </Row> */}
+                    </div>
                 </Container>
             </div>
         )
