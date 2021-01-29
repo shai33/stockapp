@@ -1,0 +1,18 @@
+.c-headlines a {
+    text-decoration: none;
+};
+.inputFilter{
+    display: flex;
+    flex-direction: row-reverse;
+    margin: 20px 0px;
+};
+.sortBy{
+    display: flex;
+    flex-direction: row-reverse;
+    margin: 20px 0px;
+};
+.gallery{
+    display: flex;
+    flex-wrap: wrap;
+    
+};

@@ -17,7 +17,8 @@ class HomePage extends React.Component {
             sources: [],
             titles: [],
             contents: [],
-            urls: []
+            urls: [],
+            imgs: []
         };
     }
     addTicker = (index) => {
@@ -67,12 +68,12 @@ class HomePage extends React.Component {
                     symbolResults: symbols,
                     selectedTickers: []
                 })
-                console.log('symbolresults', symbols)
+                console.log('symbolresults', names)
             });
     };
     render() {
         const tickerCards = this.state.selectedTickers.map( (ticker, index) => {
-            return <TickerBasic tickerName={ticker.name} tickerOpen={ticker.open} 
+            return <TickerBasic tickerName={ticker.name} tickerSymbol={ticker.symbol} tickerOpen={ticker.open} 
             tickerClose={ticker.close} tickerHigh={ticker.high} tickerLow={ticker.low}
             tickerVolume={ticker.volume}> </TickerBasic>
             
@@ -86,10 +87,10 @@ class HomePage extends React.Component {
                 <p></p>
                 <div>{tickerCards}</div>
                 <Container>
-                    <h4>Today's headlines</h4>
+                    <h4>Finance Headlines - Top Stories</h4>
                     <p></p>
                     <HomeComp sources={this.state.sources} titles={this.state.titles}
-                            contents={this.state.contents} urls={this.state.urls}/>
+                            contents={this.state.contents} urls={this.state.urls} imgs={this.state.imgs}/>
                 </Container>
             </div>
         )
@@ -108,32 +109,16 @@ class HomePage extends React.Component {
           const urls = res.data.articles.map( (item) => {
             return item.url;
           });
+          const imgs = res.data.articles.map( (item) => {
+            return item.urlToImage;
+          });
           this.setState({
               sources: sources,
               titles: titles,
               contents: contents,
-              urls: urls
+              urls: urls,
+              imgs: imgs
             });
- /*       
-          let newIndex = [];
-          for(let i=0, symbolsArr=[]; i<names.length; i++){
-            symbolsArr.push(symbols[i]);
-          }
-          const symbolsStr = symbolsArr.join(",");
-            axios.get(`http://api.marketstack.com/v1/eod/latest?access_key=43d9fceee09a8d4b8113b69f9214c110&symbols=${symbolsStr}`).then( (res) => {
-
-                console.log('marketPage', res.data.data)
-
-            // newIndex.push(result.data.message)
-            // console.log('newIndex', newIndex)
-            // console.log(' Ajax finished loading'); 
-            // this.setState({indexData: newIndex});
-            })
-            .catch(err => {
-                // Handle Error Here
-                console.error(err);
-            });
-          }*/
         });
       }
 }
