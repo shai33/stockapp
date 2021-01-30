@@ -4,7 +4,8 @@ import { Button, Col, Container, Row, Table } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import {withRouter} from 'react-router';
 import {Line} from 'react-chartjs-2';
-import { getCurrentDate, calcDayHours, calcWeekDays, calcMonthDays, calcYearDays } from "../utils/handleTime"
+import { getCurrentDate, calcDayHours, calcWeekDays, calcMonthDays, calcYearDays } from "../utils/handleTime";
+import { removeNullValues } from "../utils/utils";
 
 class TickerComp extends React.Component{
     constructor(props){
@@ -236,7 +237,7 @@ class TickerComp extends React.Component{
         });
       };
       weekChart = () => {
-        axios.get(`http://api.marketstack.com/v1/intraday?access_key=43d9fceee09a8d4b8113b69f9214c110&symbols=${this.state.symbol}&date_from=${getCurrentDate(-7)}&date_to=${getCurrentDate(0)}&interval=3hour`)
+        axios.get(`http://api.marketstack.com/v1/intraday?access_key=43d9fceee09a8d4b8113b69f9214c110&symbols=${this.state.symbol}&date_from=${getCurrentDate(-7)}&date_to=${getCurrentDate(0)}&interval=1hour`)
             .then( (res) => {
                 const last = res.data.data.map( (item) => {
                     return item.last;
@@ -245,8 +246,8 @@ class TickerComp extends React.Component{
                 this.setState({
                     last: last,
                     chartData: {
-                        labels: [calcWeekDays(-7), calcWeekDays(-6), calcWeekDays(-5), calcWeekDays(-4), 
-                                  calcWeekDays(-3), calcWeekDays(-2), calcWeekDays(-1)],
+                        labels: [calcWeekDays(-7), '', '', '', '', calcWeekDays(-6), '', '', '', '', calcWeekDays(-5), '', '', '', '', calcWeekDays(-4), '', '', '', '', 
+                                  calcWeekDays(-3), '', '', '', '', calcWeekDays(-2), '', '', '', '', calcWeekDays(-1), '', ''],
                         datasets: [
                           {
                             ...this.datasets,
@@ -262,7 +263,7 @@ class TickerComp extends React.Component{
         });
       };
       monthChart = () => {
-        axios.get(`http://api.marketstack.com/v1/intraday?access_key=43d9fceee09a8d4b8113b69f9214c110&symbols=${this.state.symbol}&date_from=${getCurrentDate(-30)}&date_to=${getCurrentDate(0)}&interval=6hour`)
+        axios.get(`http://api.marketstack.com/v1/intraday?access_key=43d9fceee09a8d4b8113b69f9214c110&symbols=${this.state.symbol}&date_from=${getCurrentDate(-30)}&date_to=${getCurrentDate(0)}&interval=3hour`)
             .then( (res) => {
                 const last = res.data.data.map( (item) => {
                     return item.last;
@@ -271,8 +272,8 @@ class TickerComp extends React.Component{
                 this.setState({
                     last: last,
                     chartData: {
-                        labels: [calcMonthDays(-27), calcMonthDays(-22), calcMonthDays(-17), calcMonthDays(-12), 
-                                  calcMonthDays(-7), calcMonthDays(-2), calcMonthDays(5)],
+                        labels: [calcMonthDays(-27), '', '', '', '', calcMonthDays(-22), '', '', '', '', calcMonthDays(-17), '', '', '', '', calcMonthDays(-12), '', '', '', '', 
+                                  calcMonthDays(-7), '', '', '', '', calcMonthDays(-2), '', '', '', '', calcMonthDays(5), '', ''],
                         datasets: [
                           {
                             ...this.datasets,
@@ -290,17 +291,18 @@ class TickerComp extends React.Component{
       yearChart = () => {
         axios.get(`http://api.marketstack.com/v1/intraday?access_key=43d9fceee09a8d4b8113b69f9214c110&symbols=${this.state.symbol}&date_from=${getCurrentDate(-365)}&date_to=${getCurrentDate(0)}&interval=6hour`)
             .then( (res) => {
-                const last = res.data.data.map( (item) => {
+                const lastYear = res.data.data.map( (item) => {
                     return item.last;
-                })
+                });
+                const last = removeNullValues(lastYear);
                 console.log('lastYear', last)
                 this.setState({
                     last: last,
                     chartData: {
-                        labels: [calcYearDays(-12, 0), '', '', '', '', '', '', '', '', '', '', '', '', calcYearDays(-10, 10), '', '', '', '', '', '', '', '', '', '', '', '',  
-                                calcYearDays(-8, 10), '', '', '', '', '', '', '', '', '', '', '', '', calcYearDays(-6, 10), '', '', '', '', '', '', '', '', '', '', '', '',  
-                                  calcYearDays(-4, 10), '', '', '', '', '', '', '', '', '', '', '', '', calcYearDays(-2, 10), '', '', '', '', '', '', '', '', '', '', '', '', 
-                                  calcYearDays(0, 29)],
+                        labels: [calcYearDays(-12, 0), '', '', '', '', '', '', '', '', '', '', '', '', '', '', calcYearDays(-10, 10), '', '', '', '', '', '', '', '', '', '', '', '', '', 
+                                calcYearDays(-8, 10), '', '', '', '', '', '', '', '', '', '', '', '', calcYearDays(-6, 10), '', '', '', '', '', '', '', '', '', '', '', '', '',
+                                  calcYearDays(-4, 10), '', '', '', '', '', '', '', '', '', '', '', '', calcYearDays(-2, 10), '', '', '', '', '', '', '', '', '', '', '', '', '',
+                                  calcYearDays(0, 29), '', '', '', '', '', '', '', ''],
                         datasets: [
                           {
                             ...this.datasets,
