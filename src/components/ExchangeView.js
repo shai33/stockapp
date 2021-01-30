@@ -181,8 +181,8 @@ class ExchangeComp extends React.Component{
                 this.setState({
                     last: last,
                     chartData: {
-                        labels: [calcMonthDays(-27), calcMonthDays(-22), calcMonthDays(-17), calcMonthDays(-12), 
-                                  calcMonthDays(-7), calcMonthDays(-2), calcMonthDays(5)],
+                        labels: [calcMonthDays(-27), '', '', '', calcMonthDays(-22), '', '', '', calcMonthDays(-17), '', '', '', calcMonthDays(-12), '', '', '', 
+                                  calcMonthDays(-7), '', '', '', calcMonthDays(-2), '', '', '', calcMonthDays(5), '', '', '', ''],
                         datasets: [
                           {
                             ...this.datasets,
@@ -203,7 +203,7 @@ class ExchangeComp extends React.Component{
                 const last = res.data.data.eod.map( (item) => {
                     return item.close;
                 })
-                console.log('lastMonth', last)
+                console.log('lasYear', last)
                 this.setState({
                     last: last,
                     chartData: {

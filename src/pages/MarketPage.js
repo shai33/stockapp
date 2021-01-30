@@ -22,9 +22,7 @@ class MarketPage extends React.Component {
                     <MarketsComp exchanges={this.state.exchangesData} index={this.state.indexData}
                                   country={this.state.countryData}/>
                     <div className="gallery">
-                    {/* <Row>
-                        {this.state.card ? filteredActor : actorCardInfo}
-                    </Row> */}
+            
                     </div>
                 </Container>
             </div>

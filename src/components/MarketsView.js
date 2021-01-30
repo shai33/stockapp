@@ -37,7 +37,7 @@ class MarketsComp extends React.Component{
         console.log('exchanges', this.props.exchanges);
         console.log('index', this.props.index);
         for(let i=0; i<this.props.exchanges.length; i++) {
-            const cardContent = <Col xs={6} lg={3}>
+            const cardContent = <Col xs={6} lg={4}>
             <Card bg="secondary" text="white" style={{ width: '18rem',  margin: '3px' }} 
                 onClick={() => this.handleClick(this.props.index[i])}>
                <Card.Header as="h5">{this.props.exchanges[i]}</Card.Header>
@@ -58,13 +58,12 @@ class MarketsComp extends React.Component{
               else{
                 exchangeCardInfo.push(cardContent);
                 }
-         }
-
+        }
         return ( 
         <div>
             <div className="inputFilter">
                 <input onChange={this.filterMarkets} value={this.state.result} 
-                    placeholder="Filter by Index Name"/>
+                    placeholder="Filter by Index Name" size="35"/>
             </div>
             <p></p>
             <div className="gallery">
@@ -76,8 +75,7 @@ class MarketsComp extends React.Component{
           
         </div>
         )
-    }
-    
+    } 
 }
 
 export default MarketsComp;

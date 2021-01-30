@@ -5,6 +5,7 @@ import { Container } from 'react-bootstrap';
 import LiveSearchBox from '../components/LiveSearchBox';
 import TickerBasic from '../components/TickerBasic';
 import HomeComp from '../components/HomeView';
+import '../components/HomeView.css';
 import StockappNavbar from '../components/StockappNavbar';
 
 class HomePage extends React.Component {
@@ -89,8 +90,10 @@ class HomePage extends React.Component {
                 <Container>
                     <h4>Finance Headlines - Top Stories</h4>
                     <p></p>
-                    <HomeComp sources={this.state.sources} titles={this.state.titles}
-                            contents={this.state.contents} urls={this.state.urls} imgs={this.state.imgs}/>
+                    <div className="news-section">
+                        <HomeComp sources={this.state.sources} titles={this.state.titles}
+                                contents={this.state.contents} urls={this.state.urls} imgs={this.state.imgs}/>
+                    </div>
                 </Container>
             </div>
         )

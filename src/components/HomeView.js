@@ -7,11 +7,24 @@ class HomeComp extends React.Component{
     constructor(props){
       super(props);
       this.state = {
-          result: ''
+          result: '',
+          card: false
       };
-    }
+    };
+    filterMarkets = (event) => {
+        const inputStr = event.target.value;
+        this.setState({
+                result: inputStr,
+                card: true
+        });
+    };
+    getFilter = () => {
+        const res = this.state.result;
+        return res.toUpperCase(); // ignore upper and lowercase
+    };
     render(){
         const newsCardInfo = [];
+        const filteredArticle =[];
         console.log('foooo', this.props.sources);
         console.log('foooo1', this.props.titles.length);
         for(let i=0; i<this.props.sources.length; i++) {
@@ -25,15 +38,29 @@ class HomeComp extends React.Component{
                </Card.Body>
                </Card></a>
                </Col>
-             newsCardInfo.push(cardContent);
+            //  newsCardInfo.push(cardContent);
+             
+             if((this.props.sources[i].toUpperCase().includes(this.getFilter())) ||
+                (this.props.contents[i].toUpperCase().includes(this.getFilter())) ||
+                (this.props.titles[i].toUpperCase().includes(this.getFilter()))){
+                    filteredArticle.push(cardContent);
+                    newsCardInfo.push(cardContent);
+                }
+              else{
+                newsCardInfo.push(cardContent);
+                }
          }
-
         return ( 
         <div>
+            <div className="inputFilter">
+                <input onChange={this.filterMarkets} value={this.state.result} 
+                    placeholder="Filter by Name/Title/Source" size="35"/>
+            </div>
+            <p></p>
             <div className="gallery">
             <Row style={{ margin: '2px' }}>
-                {newsCardInfo}
-
+                {/* {newsCardInfo} */}
+                {this.state.card ? filteredArticle : newsCardInfo}
             </Row>
           </div>
           
