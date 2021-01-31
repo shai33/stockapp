@@ -41,7 +41,8 @@ class TickerComp extends React.Component{
           volume: '',
           last1: '',
           last: '',
-          chartData: ''
+          chartData: '',
+          isPrevDaydata: true
       };
     };
   //   getCurrentDate = (offset) => {
@@ -122,6 +123,8 @@ class TickerComp extends React.Component{
         <div>
             <div className="gallery">
             <Container>
+                
+                {this.state.isPrevDaydata ? exchangeCardInfo : <p>No data from previous day</p>}
                 {exchangeCardInfo}
             </Container>
           </div>
@@ -129,13 +132,15 @@ class TickerComp extends React.Component{
         )
     }
     componentDidMount(){
-        axios.get(`http://api.marketstack.com/v1/intraday/${getCurrentDate(0)}?access_key=43d9fceee09a8d4b8113b69f9214c110&symbols=${this.state.symbol}&interval=15min`)
+        axios.get(`https://api.marketstack.com/v1/intraday/${getCurrentDate(0)}?access_key=43d9fceee09a8d4b8113b69f9214c110&symbols=${this.state.symbol}&interval=15min`)
             .then( (res) => {
               console.log('res.data.dataToday', res.data.data)
               if(res.data.data.length === 0){
-                axios.get(`http://api.marketstack.com/v1/intraday/${getCurrentDate(-1)}?access_key=43d9fceee09a8d4b8113b69f9214c110&symbols=${this.state.symbol}&interval=15min`)
+                axios.get(`https://api.marketstack.com/v1/intraday/${getCurrentDate(-1)}?access_key=43d9fceee09a8d4b8113b69f9214c110&symbols=${this.state.symbol}&interval=15min`)
                     .then( (res) => {
-                      const open = res.data.data[0].open;
+                      console.log('res.data.dataPrevday', res.data.data)
+                if(res.data.data.length !== 0){
+                const open = res.data.data[0].open;
                 const high =res.data.data[0].high;
                 const low =res.data.data[0].low;
                 const close =res.data.data[0].close;
@@ -164,6 +169,12 @@ class TickerComp extends React.Component{
                         ]
                       }
                     });
+                  }
+                  else {
+                    this.setState({
+                      isPrevDaydata: false
+                    });
+                  }
                 });
               }
                 const open = res.data.data[0].open;
@@ -200,7 +211,7 @@ class TickerComp extends React.Component{
             // Handle Error Here
             console.error(err);
         });
-        axios.get(`http://api.marketstack.com/v1/tickers/${this.state.symbol}?access_key=43d9fceee09a8d4b8113b69f9214c110`).then( (res) => {
+        axios.get(`https://api.marketstack.com/v1/tickers/${this.state.symbol}?access_key=43d9fceee09a8d4b8113b69f9214c110`).then( (res) => {
     
           console.log('exchangeName', res.data.name)
           this.setState({

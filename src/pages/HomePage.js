@@ -81,7 +81,8 @@ class HomePage extends React.Component {
         });
         return (
             <div className="c-home-page">
-                <div>
+                <div className="search-box">
+                   
                     <LiveSearchBox searchTextChanged={this.searchTickers} resultSelected={this.addTicker}
                     placeholderText="Symbol/Company/Index" results={this.state.results} />
                 </div>

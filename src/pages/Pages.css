@@ -1,0 +1,10 @@
+* {
+    box-sizing: border-box;
+}
+.c-watchlist-cards {
+    margin: '5px';
+}
+.c-home-page, .search-box {
+    margin-top: '10px';
+    background-color: 'green';
+}

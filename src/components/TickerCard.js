@@ -14,7 +14,8 @@ class TickerCard extends React.Component{
         close: '', 
         high: '', 
         low: '', 
-        volume: ''
+        volume: '',
+        isLoaded: false
       };
     }
     handleClick = (symbol) => {
@@ -26,9 +27,12 @@ class TickerCard extends React.Component{
         return (last/close*100 -100).toFixed(2);
     };
     render(){
+        if(!this.state.isLoaded){
+            // return <EmptyCard/>
+        }
         let chng = this.calcChange(this.state.last, this.state.close);
         const tickerCardInfo = <Col xs={12} lg={3}>
-            <Card style={{ width: '18rem' }}>
+            <Card style={{ width: '18rem', marginTop: '15px' }}>
             <Card.Header as="h6" onClick={() => this.handleClick(this.props.tickerSymbol)}>
                 {this.props.tickerSymbol}
                 <p></p>
@@ -85,7 +89,8 @@ class TickerCard extends React.Component{
                     close: close, 
                     high: high, 
                     low: low, 
-                    volume: volume
+                    volume: volume,
+                    isLoaded: true
                 });
             });
       }

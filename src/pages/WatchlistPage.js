@@ -1,11 +1,12 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
+import { Row } from 'react-bootstrap';
 
 import LiveSearchBox from '../components/LiveSearchBox';
 import TickerCard from '../components/TickerCard'
 import tickerJSON from '../data/tickers.json';
-import { Row } from 'react-bootstrap';
+import './Pages.css';
 
 class WatchlistPage extends React.Component {
     constructor(props) {
@@ -148,16 +149,17 @@ class WatchlistPage extends React.Component {
         }
         return (
                 <div className="c-watchlist-page">
-                <LiveSearchBox 
-                searchTextChanged={this.searchTickers}
-                resultSelected={this.addTicker}
-                placeholderText="Symbol/Company/Index" 
-                results={this.state.results} />
-                
-                <div>
+                    <LiveSearchBox 
+                    searchTextChanged={this.searchTickers}
+                    resultSelected={this.addTicker}
+                    placeholderText="Symbol/Company/Index" 
+                    results={this.state.results} />
+                    <p></p>
+                <div className="c-watchlist-cards">
                 <Row>
                     {tickerCards}
                 </Row>
+                <p></p>
                 </div>
             </div>
         )

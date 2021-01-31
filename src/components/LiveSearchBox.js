@@ -58,7 +58,7 @@ class LiveSearchBox extends React.Component{
         })
         return (
             <div className="c-live-search-box">
-               <Form.Control type="search" 
+               <Form.Control type="search" className="search-input"
                onChange={this.handleInputChange}
                 placeholder={placeholderText}
                 value={this.state.searchText}/>
