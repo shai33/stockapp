@@ -182,7 +182,7 @@ class ExchangeComp extends React.Component{
                     last: last,
                     chartData: {
                         labels: [calcMonthDays(-27), '', '', '', calcMonthDays(-22), '', '', '', calcMonthDays(-17), '', '', '', calcMonthDays(-12), '', '', '', 
-                                  calcMonthDays(-7), '', '', '', calcMonthDays(-2), '', '', '', calcMonthDays(5), '', '', '', ''],
+                                  calcMonthDays(-7), '', '', '', calcMonthDays(-2), '', '', '', '', calcMonthDays(5), '', '', '', ''],
                         datasets: [
                           {
                             ...this.datasets,
