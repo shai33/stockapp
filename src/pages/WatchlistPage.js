@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Row } from 'react-bootstrap';
 
 import LiveSearchBox from '../components/LiveSearchBox';
-import TickerCard from '../components/TickerCard'
+import TickerCard from '../components/TickerCard';
 import tickerJSON from '../data/tickers.json';
 import './Pages.css';
 
@@ -148,8 +148,8 @@ class WatchlistPage extends React.Component {
             });
         }
         return (
-                <div className="c-watchlist-page">
-                    <LiveSearchBox 
+            <div className="c-watchlist-page">
+                <LiveSearchBox 
                     searchTextChanged={this.searchTickers}
                     resultSelected={this.addTicker}
                     placeholderText="Symbol/Company/Index" 

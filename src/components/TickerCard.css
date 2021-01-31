@@ -1,3 +1,35 @@
 .card-body {
     font-size: 14px;
 };
+.avatar-placeholder {
+    float: left;
+    width: 48px;
+    height: 48px;
+    margin-right: 12px;
+    margin-bottom: 5px;
+  }
+  
+  .text-placeholder {
+    height: 8px;
+    margin-bottom: 5px;
+  }
+  
+  .placeholder {
+    display: inline-block;
+    background-color: #b0c0c7;
+    animation-name: shine;
+    animation-duration: 2.4s;
+    animation-iteration-count: infinite;
+  }
+  
+  @keyframes shine {
+    0% { 
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.35;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
