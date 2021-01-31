@@ -1,4 +1,5 @@
 import {  Nav, Navbar } from "react-bootstrap";
+import './StockappNavbar.css'
 
 // will show login/signup for unregistered users & logout to registered users
 // Props:
@@ -10,7 +11,7 @@ const StockappNavbar = function(props) {
     const signupEl = ( ! activeUser) ?  <Nav.Link href="/#/signup">Signup</Nav.Link>  : null;
     const logoutEl = (activeUser) ?  <Nav.Link onClick={handleLogout}>Logout</Nav.Link> : null;
     return (
-        <Navbar bg="success" expand="lg"  variant="dark">
+        <Navbar className="navBgColor" expand="lg"  variant="dark">
           <Navbar.Brand href="/">StockApp</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
