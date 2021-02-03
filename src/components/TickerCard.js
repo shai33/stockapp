@@ -4,7 +4,6 @@ import { Button, Col, Row } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import { Redirect } from 'react-router-dom';
 
-import TickerEmptyCard from './TickerEmptyCard';
 import './TickerCard.css';
 
 class TickerCard extends React.Component{
@@ -30,8 +29,10 @@ class TickerCard extends React.Component{
     };
     render(){
         if(!this.state.isLoaded){
-            return <TickerEmptyCard/>
+            console.log('isCardLoadedCard', this.state.isLoaded);
+            return this.props.isCardLoaded
         };
+        console.log('isCardLoadedCard1', this.props.isCardLoaded);
         let chng = this.calcChange(this.state.last, this.state.close);
         const tickerCardInfo = <Col xs={12} lg={3}>
             <Card style={{ width: '18rem', marginTop: '15px' }}>

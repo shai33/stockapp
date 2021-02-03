@@ -136,7 +136,7 @@ class TickerComp extends React.Component{
             .then( (res) => {
               console.log('res.data.dataToday', res.data.data)
               if(res.data.data.length === 0){
-                axios.get(`https://api.marketstack.com/v1/intraday/${getCurrentDate(-1)}?access_key=43d9fceee09a8d4b8113b69f9214c110&symbols=${this.state.symbol}&interval=15min`)
+                axios.get(`https://api.marketstack.com/v1/intraday/${getCurrentDate(-3)}?access_key=43d9fceee09a8d4b8113b69f9214c110&symbols=${this.state.symbol}&interval=15min`)
                     .then( (res) => {
                       console.log('res.data.dataPrevday', res.data.data)
                 if(res.data.data.length !== 0){

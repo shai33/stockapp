@@ -5,6 +5,7 @@ import { Row } from 'react-bootstrap';
 
 import LiveSearchBox from '../components/LiveSearchBox';
 import TickerCard from '../components/TickerCard';
+import TickerEmptyCard from '../components/TickerEmptyCard';
 import tickerJSON from '../data/tickers.json';
 import './Pages.css';
 
@@ -23,7 +24,8 @@ class WatchlistPage extends React.Component {
             selectedTickers: [],
             symbolResults: [],
             myTickers: myTickers,
-            index: ''
+            index: '',
+            isLoaded: false
         };
     }
     addTicker = (index) => {
@@ -125,17 +127,27 @@ class WatchlistPage extends React.Component {
             myTickers: JSON.parse(localStorage.getItem('localTickers'))
         });
     };
+    isCardLoaded = () => {
+        console.log('isCardLoaded', this.state.isLoaded);
+        this.setState({
+            isLoaded: true
+        });
+    };
     render() {
         if( ! this.props.activeUser){
             return <Redirect push to="/login" />
-        }
+        };
+        if(!this.state.isLoaded){
+            return <TickerEmptyCard isCardLoaded={() => this.isCardLoaded()}/>
+        };
         let tickerCards;
         if(this.state.myTickers){
             tickerCards = this.state.myTickers.map( (ticker, index) => {
                 return <TickerCard tickerName={ticker.name} tickerSymbol={ticker.symbol} tickerOpen={ticker.open} 
                 tickerClose={ticker.close} tickerHigh={ticker.high} tickerLow={ticker.low}
                 tickerVolume={ticker.volume} tickerLast={ticker.last} 
-                removeTicker={() => this.removeTicker(ticker.symbol)}></TickerCard>
+                removeTicker={() => this.removeTicker(ticker.symbol)}
+                isCardLoaded={() => this.isCardLoaded()}></TickerCard>
                 
             });
         }
@@ -143,10 +155,12 @@ class WatchlistPage extends React.Component {
             tickerCards = this.state.selectedTickers.map( (ticker, index) => {
                 return <TickerCard tickerName={ticker.name} tickerSymbol={ticker.symbol} tickerOpen={ticker.open} 
                 tickerClose={ticker.close} tickerHigh={ticker.high} tickerLow={ticker.low}
-                tickerVolume={ticker.volume} tickerLast={ticker.last}> </TickerCard>
+                tickerVolume={ticker.volume} tickerLast={ticker.last}
+                isCardLoaded={() => this.isCardLoaded()}> </TickerCard>
                 
             });
         }
+        
         return (
             <div className="c-watchlist-page">
                 <LiveSearchBox 
